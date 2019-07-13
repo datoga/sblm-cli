@@ -5,7 +5,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/datoga/sblm_cli/data"
+	"github.com/datoga/sblm-cli/data"
 )
 
 //Client is a structure to manage context information about the client

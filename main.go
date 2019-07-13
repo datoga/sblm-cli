@@ -14,7 +14,7 @@
 
 package main
 
-import "github.com/datoga/sblm_cli/cmd"
+import "github.com/datoga/sblm-cli/cmd"
 
 func main() {
 	cmd.Execute()

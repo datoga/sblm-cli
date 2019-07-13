@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/datoga/sblm_cli/data"
+	"github.com/datoga/sblm-cli/data"
 	"gopkg.in/resty.v1"
 )
 

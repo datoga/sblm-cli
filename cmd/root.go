@@ -20,7 +20,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/datoga/sblm_cli/core"
+	"github.com/datoga/sblm-cli/core"
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -43,7 +43,7 @@ func init() {
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "sblm_cli",
+	Use:   "sblm-cli",
 	Short: "CLI to manage Spring Boot loggers",
 	Long:  `This CLI allows to users to list or edit the Spring Boot logger from any online Spring Boot application.`,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
@@ -93,7 +93,7 @@ func init() {
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
-	//rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.sblm_cli.yaml)")
+	//rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.sblm-cli.yaml)")
 
 	rootCmd.PersistentFlags().StringVarP(&server, "server", "s", "http://localhost:8080", "Server to get information")
 
@@ -117,9 +117,9 @@ func initConfig() {
 			os.Exit(1)
 		}
 
-		// Search config in home directory with name ".sblm_cli" (without extension).
+		// Search config in home directory with name ".sblm-cli" (without extension).
 		viper.AddConfigPath(home)
-		viper.SetConfigName(".sblm_cli")
+		viper.SetConfigName(".sblm-cli")
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match

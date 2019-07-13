@@ -1,4 +1,4 @@
-module github.com/datoga/sblm_cli
+module github.com/datoga/sblm-cli
 
 require (
 	github.com/buger/goterm v0.0.0-20181115115552-c206103e1f37
