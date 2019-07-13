@@ -1,39 +1,32 @@
 package core
 
 import (
-	"encoding/json"
 	"errors"
-	"net/http"
 	"net/url"
-	"strconv"
 	"strings"
 
 	"github.com/datoga/sblm_cli/data"
-	"gopkg.in/resty.v1"
 )
 
 //Client is a structure to manage context information about the client
 type Client struct {
-	endpoint *url.URL
+	requests *Requests
 	verbose  bool
 }
 
 //NewClient creates a new client to make requests to spring boot logger endpoints
 func NewClient(endpoint *url.URL, verbose bool) *Client {
 
-	if verbose {
-		resty.SetDebug(true)
-	}
+	requests := NewRequests(endpoint, verbose)
 
 	return &Client{
-		endpoint: endpoint,
-		verbose:  verbose,
+		requests: requests,
 	}
 }
 
 //ListLoggers gets all the available loggers published by the actuator which begins by the logger string
 func (client Client) ListLoggers(filter string) (data.Loggers, error) {
-	actuatorData, err := client.list()
+	actuatorData, err := client.requests.List()
 
 	if err != nil {
 		return nil, err
@@ -70,62 +63,15 @@ func (client Client) EditLoggers(filter string, newLevel string) (int, error) {
 		return 0, nil
 	}
 
-	err = client.edit(filter, newLevel)
+	loggerLevel := data.LoggerLevel{
+		ConfiguredLevel: newLevel,
+	}
+
+	err = client.requests.Edit(filter, loggerLevel)
 
 	if err != nil {
 		return -1, nil
 	}
 
 	return len(loggers), nil
-}
-
-func (client Client) list() (*data.ActuatorData, error) {
-	resp, err := resty.R().Get(client.endpoint.String())
-
-	if err != nil {
-		return nil, err
-	}
-
-	if resp.StatusCode() != http.StatusOK {
-		return nil, errors.New("Error with status code " + strconv.Itoa(resp.StatusCode()))
-	}
-
-	actuatorData := data.ActuatorData{}
-
-	err = json.Unmarshal(resp.Body(), &actuatorData)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return &actuatorData, nil
-}
-
-func (client Client) edit(logger string, newLevel string) error {
-	endpoint := client.endpoint.String() + "/" + logger
-
-	loggerLevel := data.LoggerLevel{
-		ConfiguredLevel: newLevel,
-	}
-
-	loggerLevelStr, err := json.Marshal(loggerLevel)
-
-	if err != nil {
-		return err
-	}
-
-	resp, err := resty.R().
-		SetHeader("Content-Type", "application/json").
-		SetBody(loggerLevelStr).
-		Post(endpoint)
-
-	if err != nil {
-		return err
-	}
-
-	if resp.StatusCode() != http.StatusOK {
-		return errors.New("Error with status code " + strconv.Itoa(resp.StatusCode()))
-	}
-
-	return nil
 }
