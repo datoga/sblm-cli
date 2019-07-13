@@ -67,7 +67,7 @@ http://localhost:8080/HelloWorld/actuator/loggers/org.springframework.web.server
 Aditionally sends, by POST parameter a JSON like that:
 ```json
 "org.springframework.web.server": {
-    "configuredLevel": DEBUG
+    "configuredLevel": "DEBUG"
 }
 ```
 
